@@ -2,7 +2,7 @@
 var moviesList = {};
 var sortedMoviesList = [];
 var tasteKidAPI = 'https://www.tastekid.com/api/similar?callback=?';
-var imdbAPI = 'http://www.omdbapi.com/?callback=?';
+var imdbAPI = 'https://www.omdbapi.com/?callback=?';
 var counter = 0;
 
 //String/title modifiers
