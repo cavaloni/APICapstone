@@ -4,6 +4,8 @@ var sortedMoviesList = [];
 var tasteKidAPI = 'https://www.tastekid.com/api/similar?callback=?';
 var imdbAPI = 'http://www.omdbapi.com/?callback=?';
 var counter = 0;
+var movieSearched = '';
+var firstSearchPerformed = false;
 
 //String/title modifiers
 function toTitleCase(str)
@@ -45,10 +47,31 @@ function getIMDBResults(searchTerm, callback) {
 //---------
 //The guts: Getting search results from TasteKid, then requesting those movies in IMDB,
 //then rendering the results to the page.
+
+firstSearchButton();
+
+function firstSearchButton () {
+  $('.js-first-search-button').on('click', function(e) {
+      e.preventDefault();
+      var query = $('.first-search-form').find('.-first-ajax-search').val();
+      movieSearched = query.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+      getTasteKidResults(query, createMovieList);
+      $('.first-search-box').fadeOut("slow", function() {
+        console.log('worked');
+      });
+      $('.logo').animate({
+        top: "80px",
+        left: "40px"
+      });
+      $('.content').append('<div class="spinner"></div>');
+});
+}
+
 function searchButton() {
-    $('.js-search-button').on('click', function(e) {
+    $('.search-box-area').on('click', '.js-search-button', function(e) {
         e.preventDefault();
         counter = 0;
+        $('.search-results-area').fadeOut('slow');
         $('.search-results-area').empty();
         for (var member in moviesList) delete moviesList[member];
         sortedMoviesList = [];
@@ -58,7 +81,7 @@ function searchButton() {
 }
 
 function createMovieList(data) {
-    if (data.Similar.Info[0].Type == 'unknown') {
+    if (data.Similar.Info[0].Type === 'unknown') {
         alert('No movies found. Please try a different search.');
     } else {
         for (i = 0; i < data.Similar.Results.length; i++) {
@@ -92,10 +115,13 @@ function addMovieInfoToList(data) {
         moviesList[titles].poster = data.Poster;
         moviesList[titles].consensus = data.tomatoConsensus;
     }
+    $('.counter-div').append('.');
     if (counter >= moviesListLength.length) {
         sortMoviesByRating(moviesList);
     }
 }
+
+
 
 function sortMoviesByRating(list) {
     var movieNamesAndScores = {};
@@ -124,18 +150,45 @@ function renderList() {
     for (i = 0; i < sortedMoviesList.length; i++) {
         upperName = sortedMoviesList[i].replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
         itemsToRender[i] = '<div class=\"movie-result-box\">' +
+            '<div class=\"row\">'+
+            '<div class=\"col\">' +
             '<span class=\"name-image-trailer-box\">' +
-            '<div>' + upperName + '</div>' +
+            '<h3>' + upperName + '</h3>' +
             '<img src=\"' + moviesList[sortedMoviesList[i]].poster + '\" alt=\"Movie Poster Image\">' +
-            '<div><a href=' + moviesList[sortedMoviesList[i]].yUrl + '>Trailer Link</a>  </div>' +
+            '<div><a href=' + moviesList[sortedMoviesList[i]].yUrl + '>Watch Trailer</a>  </div>' +
             '</span>' +
+            '</div>'+
+            '</div>'+
+            '<div class=\"row\">'+
+            '<div class=\"col\">' +
             '<span class=\"plot-score-box\">' +
             '<div>' + moviesList[sortedMoviesList[i]].plot + '</div>' +
             '<div>Crtic Consensus: "' + moviesList[sortedMoviesList[i]].consensus + '"</div>' +
             '<div>Rotten Score: ' + moviesList[sortedMoviesList[i]].score + '% </div>' +
-            '</span>';
+            '</span>'+
+            '</div>'+
+            '</div>';
     }
     $('.search-results-area').html(itemsToRender);
+    if (firstSearchPerformed === true) {
+      $('.search-results-area').fadeIn("slow");
+    } else {
+      renderSearchArea();
+    }
+}
+
+function renderSearchArea () {
+  $('.search-box-area').append(
+    "<form class=\"search-form\" action=\"#\">" +
+    "<input type=\"text\" class=\"ajax-search\" placeholder=\"Search Again\">"+
+    "<button type=\"submit\" class=\"js-search-button\">Search</button>"+
+    "</form>"+
+    "<div class=\"js-search-results\"></div>"+
+    "<p class=\"intro\">Here are some movies similar to "+ movieSearched + ", in order of their Rotten Tomatoes score:");
+    $('.spinner').remove();
+    $('.search-results-area').fadeIn("slow");
+    $('.search-box-area').fadeIn("slow");
+    firstSearchPerformed = true;
 }
 
 $(document).ready(searchButton());
