@@ -56,7 +56,6 @@ function firstSearchButton() {
         });
         getTasteKidResults(query, createMovieList);
         $('.first-search-box').fadeOut("slow", function() {
-            console.log('worked');
         });
     });
 }
@@ -79,8 +78,7 @@ function createMovieList(data) {
         alert('No movies found. Please refine your search.');
         firstSearchButton();
         $('.first-search-box').fadeIn("fast", function() {
-            console.log('worked');
-        });
+              });
     } else {
         searchingAnimations();
         for (i = 0; i < data.Similar.Results.length; i++) {
@@ -193,7 +191,6 @@ function renderList() {
 
 function lightbox() {
     $('.search-results-area').on('click', '#lightbox_trigger', function(e) {
-        console.log($(this));
         e.preventDefault();
         var videoHref = $(this).attr("href");
         var lightbox =
