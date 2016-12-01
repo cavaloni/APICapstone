@@ -7,12 +7,7 @@ var counter = 0;
 var movieSearched = '';
 var firstSearchPerformed = false;
 
-//String/title modifiers
-function toTitleCase(str) {
-    return str.replace(/\w\S*/g, function(txt) {
-        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-    });
-}
+//String/title modifier
 
 function keysToLowerCase(obj) {
     Object.keys(obj).forEach(
@@ -48,6 +43,7 @@ function getIMDBResults(searchTerm, callback) {
 //---------
 //The guts: Getting search results from TasteKid, then requesting those movies in IMDB,
 //then rendering the results to the page.
+//---------
 
 firstSearchButton();
 
@@ -89,6 +85,8 @@ function searchButton() {
     });
 }
 
+//Add the movies obtained from TasteKid into global object moviesList
+
 function createMovieList(data) {
     if (data.Similar.Info[0].Type === 'unknown') {
         alert('No movies found. Please try a different search.');
@@ -105,12 +103,14 @@ function createMovieList(data) {
             moviesList[data.Similar.Results[i].Name].yUrl = data.Similar.Results[i].yUrl;
         }
         for (var movie in moviesList) {
-            movie.replace(/['.]+/g, "");
-            movie.replace('and', "");
-            getIMDBResults(movie, addMovieInfoToList);
+            movie.replace(/['.]+/g, ""); // normalize the string to get
+            movie.replace('and', "");    // results more effectively
+            getIMDBResults(movie, addMovieInfoToList); //Get the IMDB movie information for each video in the list
         }
     }
 }
+
+//Add movie info from IMDB to the moviesList object
 
 function addMovieInfoToList(data) {
     if (data.Response == "False") {
@@ -125,12 +125,12 @@ function addMovieInfoToList(data) {
         moviesList[titles].consensus = data.tomatoConsensus;
     }
     $('.counter-div').append('.');
-    if (counter >= moviesListLength.length) {
-        sortMoviesByRating(moviesList);
+    if (counter >= moviesListLength.length) {   //A loop to stop once all the movies obtained
+        sortMoviesByRating(moviesList);         //from tasteKidAPI have been searched
     }
 }
 
-
+//Sort the movies according to their RottenTomatoes score
 
 function sortMoviesByRating(list) {
     var movieNamesAndScores = {};
@@ -153,6 +153,10 @@ function sortMoviesByRating(list) {
     }
     renderList();
 }
+
+//------
+//Render the results and prep lightbox clicking
+//------
 
 function renderList() {
     var itemsToRender = [];
@@ -193,9 +197,7 @@ function renderList() {
     }
 }
 
-// $('.name-image-trailer-box div').on('click', 'a', function() {
-//     return false;
-// });
+//lightbox
 
 function lightbox() {
     $('.search-results-area').on('click', '#lightbox_trigger', function(e) {
@@ -216,6 +218,7 @@ function lightbox() {
     });
 }
 
+//render the search area on the results page along with the results and prepare search button
 
 function renderSearchArea() {
     $('.search-box-area').append(

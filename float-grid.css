@@ -38,7 +38,12 @@
 	}
 
 .name-image-trailer-box, .plot-score-box {
-	height: 120%;
+	height: 100%;
+}
+
+#lightbox iframe {
+  margin-top: 100px;
+
 }
 
 	.first-search-box {
@@ -50,4 +55,12 @@
   .col-12 {
     width: 100%;
   }
+}
+
+/*Ipad*/
+
+@media only screen and (min-width: 641px) and (max-width: 930px) {
+	.name-image-trailer-box, .plot-score-box {
+		height: 140%;
+	}
 }

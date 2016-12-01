@@ -1,64 +1,43 @@
 <html>
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Normalize.css, a cross-browser reset file -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.1.1/normalize.css" rel="stylesheet">
-  <title>Search for your favorite movies and see what movies are similar and how they are ranked, then watch the trailer.</title>
-<link rel="stylesheet" href="main.css" style="css">
-<link rel="stylesheet" href="float-grid.css" style="css">
-<link href="https://fonts.googleapis.com/css?family=Merriweather" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Poiret+One" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Normalize.css, a cross-browser reset file -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.1.1/normalize.css" rel="stylesheet">
+    <title>Search for your favorite movies and see what movies are similar and how they are ranked, then watch the trailer.</title>
+    <link rel="stylesheet" href="main.css" style="css">
+    <link rel="stylesheet" href="float-grid.css" style="css">
+    <link href="https://fonts.googleapis.com/css?family=Merriweather" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Poiret+One" rel="stylesheet">
 
 </head>
+
 <body>
-<div class="content">
+    <div class="content">
+
+        <div class="first-search-box">
+
+            <h1>Search Using a Movie Title</h1>
+            <form class="first-search-form" action="#">
+                <input type="text" class="-first-ajax-search" placeholder="e.g., Yes Man">
+                <button type="submit" class="js-first-search-button">Search</button>
+            </form>
+
+        </div>
+        <div class="logo">WatchTonight</div>
+        <div class="search-box-area">
+
+        </div>
+        <div class="search-results-area">
+
+        </div>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="app1.js"></script>
 
 
-
-<div class="first-search-box">
-
-  <h1>Search Using a Movie Title</h1>
-  <form class="first-search-form" action="#">
-    <input type="text" class="-first-ajax-search" placeholder="e.g., Yes Man">
-    <button type="submit" class="js-first-search-button">Search</button>
-  </form>
-
-</div>
-<div class="logo">WatchTonight</div>
-<div class="search-box-area">
-  <!-- <h1 class="search-area"> A movie you really like </h1>
-
-<form class="search-form" action="#">
-  <input type="text" class="ajax-search">
-  <button type="submit" class="js-search-button">Search</button>
-</form>
-    <div class="js-search-results"></div>
-
-<button type="button" class="js-next-page-button">Next</button> -->
-</div>
-<div class="search-results-area">
-
-<!-- <h2>Top Movies Similar to </h2>
-<div class="movie-result-box">
-  <span class="name-image-trailer-box">
-    <div>Movie Name</div>
-    <img src="here.jpg" alt="Movie Poster Image">
-    <div>Trailer Link</div>
-  </span>
-  <span class="plot-score-box">
-    <div>Plot</div>
-    <div>Consensus</div>
-    <div>Score</div>
-  </span> -->
-  <!-- </div> -->
-</div>
-
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-  <script src="app1.js" ></script>
-
-
-</div>
+    </div>
 </body>
 
 </html>

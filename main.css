@@ -1,41 +1,65 @@
-
-
 * {
     box-sizing: border-box;
     color: whitesmoke;
 }
 
-.intro {
-  font-size: 20px;
-  font-weight: bold;
-  filter: drop-shadow(2px black);
+
+/*Screen on page load */
+
+.first-search-box {
+    clear: both;
+    font-family: 'Merriweather', serif;
+    height: 275px;
+    width: 350px;
+    background-color: rgb(126, 189, 205, .1);
+    position: absolute;
+    top: calc(50% - 250px);
+    left: calc(50% - 175px);
+    padding: 20px;
+    border-radius: 20px;
+    border: 3px solid rgb(47, 47, 47);
+    background: radial-gradient(circle at top right, rgba(97, 150, 187, 0.3), rgba(128, 107, 44, 0.45));
+    background-blend-mode: darken;
+    box-shadow: inset 0 3px 2px rgba(0, 0, 0, .3);
 }
 
-.search-results-area {
-  display: none;
+.js-search-button {
+    display: block;
+    margin: 20px auto;
 }
 
-
-.movie-result-box {
-
-
-    height: 300px;
-    width: 100%;
-
+.logo, .logo2 {
+    transform: scale(.8, 1.9);
+    color: rgb(48, 48, 48);
+    border-left: 2px solid rgba(24, 47, 93, 0.4);
+    border-right: 2px solid rgba(24, 47, 93, 0.4);
+    text-align: center;
+    font-size: 32px;
+    border-radius: 20px;
+    height: 40px;
+    width: 250px;
+    font-family: 'Poiret One', cursive;
+    letter-spacing: 1px;
+    filter: drop-shadow(2px 2px 1px rgba(61, 61, 61, 0.39));
+    font-weight: bold;
 }
 
-.search-area {
-  margin-top: 0 auto;
+.logo {
+    position: absolute;
+    left: calc(50% - 125px);
+    bottom: 150px;
 }
 
 .logo21 {
-  position: absolute;
-  top: 40px;
-  left: 40px;
-
-  display: block;
-  margin-top: 5px;
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    display: block;
+    margin-top: 5px;
 }
+
+
+/*load waiting spinner*/
 
 .spinner {
     position: absolute;
@@ -50,70 +74,50 @@
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
-.logo, .logo2 {
-  transform:scale(.8,1.9);
-  color: rgb(48, 48, 48);
-  border-left: 2px solid rgba(24, 47, 93, 0.4);
-  border-right: 2px solid rgba(24, 47, 93, 0.4);
-  text-align: center;
-  font-size: 32px;
-  border-radius: 20px;
-  height: 40px;
-  width: 250px;
-  font-family: 'Poiret One', cursive;
-  letter-spacing: 1px;
-  filter:drop-shadow(2px 2px 1px rgba(61, 61, 61, 0.39));
 
-  font-weight: bold;
+/*Search results page*/
 
-}
-
-.logo {
-  position: absolute;
-  left: calc(50% - 125px);
-  bottom: 150px;
+.search-area {
+    margin-top: 0 auto;
 }
 
 .search-box-area {
-  display: none;
-  text-align: center;
-  background-color: rgb(126, 189, 205, .1);
-  border-radius: 20px;
-  border: 3px solid rgb(47, 47, 47);
-  background: radial-gradient(circle at top right, rgba(97, 150, 187, 0.3), rgba(128, 107, 44, 0.45));
-  background-blend-mode: darken;
-  box-shadow: inset 0 3px 2px rgba(0, 0, 0, .3);
-}
-
-.first-search-box {
-    clear:both;
-    font-family: 'Merriweather', serif;
-    height: 275px;
-    width: 350px;
+    display: none;
+    text-align: center;
     background-color: rgb(126, 189, 205, .1);
-    position: absolute;
-    top: calc(50% - 250px);
-    left: calc(50% - 175px);
-    padding: 20px;
     border-radius: 20px;
     border: 3px solid rgb(47, 47, 47);
     background: radial-gradient(circle at top right, rgba(97, 150, 187, 0.3), rgba(128, 107, 44, 0.45));
     background-blend-mode: darken;
     box-shadow: inset 0 3px 2px rgba(0, 0, 0, .3);
-
 }
 
-.search-box-area p {
-  font-size: 18px;
-
+.ajax-search {
+    display: block;
+    margin: 20px auto;
 }
 
-.search-form {
+.intro {
+    font-size: 20px;
+    font-weight: bold;
+    filter: drop-shadow(2px black);
+}
 
+.search-results-area {
+    display: none;
+}
+
+.movie-result-box {
+    height: 300px;
+    width: 100%;
 }
 
 .name-image-trailer-box {
@@ -122,7 +126,7 @@
     font-family: 'Merriweather', serif;
     vertical-align: top;
     border: 1px black solid;
-    height: 120%;
+    height: 140%;
     width: 100%;
     background-color: rgba(134, 134, 134, 0.32);
     display: inline-block;
@@ -134,18 +138,17 @@
     font-family: 'Merriweather', serif;
     vertical-align: top;
     border: 1px black solid;
-    height: 120%;
+    height: 140%;
     width: 100%;
     background-color: rgba(0, 74, 186, 0.4);
     display: inline-block;
 }
 
 .plot-score-box div {
-  margin-top: 10px;
+    margin-top: 10px;
 }
 
 img {
-
     margin: 20px;
     height: 150px;
     width: 100px;
@@ -153,8 +156,8 @@ img {
 }
 
 a {
-  text-decoration: none;
-  text-align: center;
+    text-decoration: none;
+    text-align: center;
 }
 
 span>div {
@@ -163,138 +166,118 @@ span>div {
 }
 
 h1 h2 {
-  font-family: 'Merriweather', serif;
-
+    font-family: 'Merriweather', serif;
 }
 
 h1 {
-  padding-top: 15px;
-  text-align: center;
-  font-size: 25px;
-
+    padding-top: 15px;
+    text-align: center;
+    font-size: 25px;
 }
 
-
 h2 {
-  font-size: 20px;
-  margin-top: 40px;
-  text-align: center;
+    font-size: 20px;
+    margin-top: 40px;
+    text-align: center;
 }
 
 h3 {
-  font-size: 22px;
-
-  margin: 10px;
+    font-size: 22px;
+    margin: 10px;
 }
 
 
+/*Global CSS*/
 
 input {
-  font-family: 'Merriweather', serif;
-  font-size: 18px;
-  border: 3px rgba(38, 45, 54, 0.79) solid;
-  border-radius: 5px;
-  background-color: rgba(116, 115, 81, 0.53);
-  display:block;
-  background-clip: content-box;
-  margin: auto;
-}
-
-.ajax-search {
-  display: block;
-  margin: 20px auto;
-}
-
-.js-search-button {
-  display:block;
-  margin: 20px auto;
+    font-family: 'Merriweather', serif;
+    font-size: 18px;
+    border: 3px rgba(38, 45, 54, 0.79) solid;
+    border-radius: 5px;
+    background-color: rgba(116, 115, 81, 0.53);
+    display: block;
+    background-clip: content-box;
+    margin: auto;
 }
 
 button {
-  margin: 5px auto ;
-  border:1px solid #393B3E;
-  border-radius: 10px;
-  font-size:13px;
-  font-family: 'Merriweather', serif;
-  font-weight: bold;
-  padding: 8px;
-  display:block;
-  text-shadow: 0px 1px 0 rgba(10,10,10,0.5);
-  text-align: center;
-  color: #8C8C8C;
-  background-color: #515459;
-  background-image: linear-gradient(to bottom, #515459, #3B3C40);
+    margin: 5px auto;
+    border: 1px solid #393B3E;
+    border-radius: 10px;
+    font-size: 13px;
+    font-family: 'Merriweather', serif;
+    font-weight: bold;
+    padding: 8px;
+    display: block;
+    text-shadow: 0px 1px 0 rgba(10, 10, 10, 0.5);
+    text-align: center;
+    color: #8C8C8C;
+    background-color: #515459;
+    background-image: linear-gradient(to bottom, #515459, #3B3C40);
 }
-  button:hover{
-   border:1px solid #393B3E;
-   background-color: #3B3C40;
-   background-image: linear-gradient(to bottom, #3B3C40, #202124);
-  }
 
+button:hover {
+    border: 1px solid #393B3E;
+    background-color: #3B3C40;
+    background-image: linear-gradient(to bottom, #3B3C40, #202124);
+}
 
 .content:before {
-  content: "";
-  position: fixed;
-  left: 0;
-  right: 0;
-  z-index: -1;
-  vertical-align: top;
-
-  background: radial-gradient(circle at top right, rgb(226, 155, 171), rgba(45, 24, 45,.41)),
-  url('bgimage.jpg');
-  display: block;
-  /*background-image: url('bgimage.jpg');*/
-  width: 100%;
-  height: 100%;
-  background-position: center;
-
-  background-blend-mode: difference;
-
-
-
-  /*-webkit-filter: blur(5px);
-  -moz-filter: blur(5px);
-  -o-filter: blur(5px);
-  -ms-filter: blur(5px);*/
-  filter: blur(8px);
+    content: "";
+    position: fixed;
+    left: 0;
+    right: 0;
+    z-index: -1;
+    vertical-align: top;
+    background: radial-gradient(circle at top right, rgb(226, 155, 171), rgba(45, 24, 45, .41)), url('bgimage.jpg');
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    background-blend-mode: difference;
+    filter: blur(8px);
 }
 
 .content {
-
-  left: 0;
-  right: 0;
-  z-index: 0;
-  margin-left: 20px;
-  margin-right: 20px;
-
+    left: 0;
+    right: 0;
+    z-index: 0;
+    margin-left: 20px;
+    margin-right: 20px;
 }
+
 
 /* Lightbox---*/
 
 #lightbox {
-    position:fixed; /* keeps the lightbox window in the current viewport */
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background-color:rgba(76, 76, 77, 0.57);
-    text-align:center;
+    position: fixed;
+    /* keeps the lightbox window in the current viewport */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(76, 76, 77, 0.57);
+    text-align: center;
+}
+
+iframe, object, embed {
+    max-width: 100%;
 }
 
 #lightbox iframe {
-  margin-top: 100px;
+    margin-top: 100px;
 }
 
 #lightbox p {
-    text-align:right;
-    color:#fff;
-    margin-right:20px;
-    font-size:12px;
+    text-align: right;
+    color: #fff;
+    margin-right: 20px;
+    font-size: 12px;
 }
 
 #lightbox a {
-    box-shadow:0 0 25px #111;
-    -webkit-box-shadow:0 0 25px #111;
-    -moz-box-shadow:0 0 25px #111;
-    max-width:940px;
+    box-shadow: 0 0 25px #111;
+    -webkit-box-shadow: 0 0 25px #111;
+    -moz-box-shadow: 0 0 25px #111;
+    max-width: 940px;
 }
