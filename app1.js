@@ -68,8 +68,7 @@ function firstSearchButton() {
             height: "25px",
             width: "140px",
             fontSize: "18px"
-        },'slow'
-      );
+        }, 'slow');
         $('.content').append('<div class="spinner"></div>');
     });
 }
@@ -85,7 +84,7 @@ function searchButton() {
         var query = $('.search-form').find('.ajax-search').val();
         movieSearched = query.replace(/\w\S*/g, function(txt) {
             return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-          });
+        });
         getTasteKidResults(query, createMovieList);
     });
 }
@@ -167,7 +166,7 @@ function renderList() {
             '<span class=\"name-image-trailer-box\">' +
             '<h3>' + upperName + '</h3>' +
             '<img src=\"' + moviesList[sortedMoviesList[i]].poster + '\" alt=\"Movie Poster Image\">' +
-            '<div><a href=' + moviesList[sortedMoviesList[i]].yUrl + '>Watch Trailer</a>  </div>' +
+            '<div><a id=\"lightbox_trigger\" href=' + moviesList[sortedMoviesList[i]].yUrl + '>Watch Trailer</a>  </div>' +
             '</span>' +
             '</div>' +
             '</div>' +
@@ -186,10 +185,37 @@ function renderList() {
         $('.search-results-area').fadeIn("slow");
         $('.search-box-area p').empty();
         $('.search-box-area p').text("Here are some movies similar to " + movieSearched + ", in order of their Rotten Tomatoes score:");
+        searchButton();
+        lightbox();
     } else {
         renderSearchArea();
+        lightbox();
     }
 }
+
+// $('.name-image-trailer-box div').on('click', 'a', function() {
+//     return false;
+// });
+
+function lightbox() {
+    $('.search-results-area').on('click', '#lightbox_trigger', function(e) {
+        console.log($(this));
+        e.preventDefault();
+        var videoHref = $(this).attr("href");
+        var lightbox =
+            "<div id=\"lightbox\">" +
+            "<p>Click to close</p>" +
+            "<div id=\"content\">" +
+            "<iframe width=\"450\" height=\"400\" src=\"" + videoHref + "\" frameborder=\"0\" allowfullscreen></iframe>" +
+            "</div>" +
+            "</div>";
+        $('body').append(lightbox);
+    });
+    $('body').on('click', '#lightbox', function() {
+        $('#lightbox').remove();
+    });
+}
+
 
 function renderSearchArea() {
     $('.search-box-area').append(
@@ -203,6 +229,7 @@ function renderSearchArea() {
     $('.search-results-area').fadeIn("slow");
     $('.search-box-area').fadeIn("slow");
     firstSearchPerformed = true;
+    searchButton();
 }
 
-$(document).ready(searchButton());
+$(document).ready();
