@@ -58,39 +58,31 @@ function firstSearchButton() {
         $('.first-search-box').fadeOut("slow", function() {
             console.log('worked');
         });
-        $('.logo').animate({
-            top: "80px",
-            left: "30px",
-            height: "25px",
-            width: "140px",
-            fontSize: "18px"
-        }, 'slow');
-        $('.content').append('<div class="spinner"></div>');
     });
 }
 
-function searchButton() {
-    $('.search-box-area').on('click', '.js-search-button', function(e) {
-        e.preventDefault();
-        counter = 0;
-        $('.search-results-area').fadeOut('slow');
-        $('.search-results-area').empty();
-        for (var member in moviesList) delete moviesList[member];
-        sortedMoviesList = [];
-        var query = $('.search-form').find('.ajax-search').val();
-        movieSearched = query.replace(/\w\S*/g, function(txt) {
-            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-        });
-        getTasteKidResults(query, createMovieList);
-    });
+function searchingAnimations() {
+    $('.logo').animate({
+        top: "80px",
+        left: "30px",
+        height: "25px",
+        width: "140px",
+        fontSize: "18px"
+    }, 'slow');
+    $('.content').append('<div class="spinner"></div>');
 }
 
 //Add the movies obtained from TasteKid into global object moviesList
 
 function createMovieList(data) {
     if (data.Similar.Info[0].Type === 'unknown') {
-        alert('No movies found. Please try a different search.');
+        alert('No movies found. Please refine your search.');
+        firstSearchButton();
+        $('.first-search-box').fadeIn("fast", function() {
+            console.log('worked');
+        });
     } else {
+        searchingAnimations();
         for (i = 0; i < data.Similar.Results.length; i++) {
             data.Similar.Results[i].Name = data.Similar.Results[i].Name.trim();
             data.Similar.Results[i].Name = data.Similar.Results[i].Name.replace(/[&]+/g, "and");
@@ -104,7 +96,7 @@ function createMovieList(data) {
         }
         for (var movie in moviesList) {
             movie.replace(/['.]+/g, ""); // normalize the string to get
-            movie.replace('and', "");    // results more effectively
+            movie.replace('and', ""); // results more effectively
             getIMDBResults(movie, addMovieInfoToList); //Get the IMDB movie information for each video in the list
         }
     }
@@ -125,8 +117,8 @@ function addMovieInfoToList(data) {
         moviesList[titles].consensus = data.tomatoConsensus;
     }
     $('.counter-div').append('.');
-    if (counter >= moviesListLength.length) {   //A loop to stop once all the movies obtained
-        sortMoviesByRating(moviesList);         //from tasteKidAPI have been searched
+    if (counter >= moviesListLength.length) { //A loop to stop once all the movies obtained
+        sortMoviesByRating(moviesList); //from tasteKidAPI have been searched
     }
 }
 
@@ -233,6 +225,22 @@ function renderSearchArea() {
     $('.search-box-area').fadeIn("slow");
     firstSearchPerformed = true;
     searchButton();
+}
+
+function searchButton() {
+    $('.search-box-area').on('click', '.js-search-button', function(e) {
+        e.preventDefault();
+        counter = 0;
+        $('.search-results-area').fadeOut('slow');
+        $('.search-results-area').empty();
+        for (var member in moviesList) delete moviesList[member];
+        sortedMoviesList = [];
+        var query = $('.search-form').find('.ajax-search').val();
+        movieSearched = query.replace(/\w\S*/g, function(txt) {
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        });
+        getTasteKidResults(query, createMovieList);
+    });
 }
 
 $(document).ready();

@@ -15,7 +15,7 @@
     position: absolute;
     top: calc(50% - 250px);
     left: calc(50% - 175px);
-    padding: 20px;
+    padding: 0px 20px 20px 20px;
     border-radius: 20px;
     border: 3px solid rgb(47, 47, 47);
     background: radial-gradient(circle at top right, rgba(97, 150, 187, 0.3), rgba(128, 107, 44, 0.45));
