@@ -45,27 +45,28 @@ function getIMDBResults(searchTerm, callback) {
 //then rendering the results to the page.
 //---------
 
-firstSearchButton();
+// $(document).ready(firstSearchButton());
 
 function firstSearchButton() {
     $('.js-first-search-button').on('click', function(e) {
         e.preventDefault();
-        var query = $('.-first-ajax-search').val();
+        var query = $('.first-search-form').find('.-first-ajax-search').val();
         movieSearched = query.replace(/\w\S*/g, function(txt) {
             return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
         });
+
         getTasteKidResults(query, createMovieList);
-        $('.first-search-box').fadeOut('slow', function() {});
+        $('.first-search-box').fadeOut("slow", function() {
+        });
     });
 }
 
 function searchingAnimations() {
     $('.logo').animate({
-        opacity: .3,
-        left: '10px',
-        top: '60px',
-        height: "22px",
-        width: "120px",
+        top: "50px",
+        left: "50px",
+        height: "25px",
+        width: "140px",
         fontSize: "18px"
     }, 'slow');
     $('.content').append('<div class="spinner"></div>');
@@ -76,31 +77,30 @@ function searchingAnimations() {
 function createMovieList(data) {
     if (data.Similar.Info[0].Type === 'unknown') {
         alert('No movies found. Please refine your search.');
-        firstSearchButton();
-        $('.first-search-box').fadeIn('fast', function() {});
+        //firstSearchButton();
+        $('.first-search-box').fadeIn("fast", function() {
+              });
     } else {
-        searchingAnimations();
-        data.Similar.Results.forEach(function(elem) {
-            var thisTitle = elem.Name;
-            thisTitle = thisTitle.trim()
-                .replace(/[&]+/g, 'and')
-                .toLowerCase();
-            moviesList[thisTitle] = {};
-            moviesList[thisTitle].yUrl = elem.yUrl;
-        });
-    }
-    for (var movie in moviesList) {
-        movie.replace(/['.]+/g, ""); // normalize the string to get
-        movie.replace('and', ""); // results more effectively
-        getIMDBResults(movie, addMovieInfoToList); //Get the IMDB movie information for each video in the list
+      //searchingAnimations();
+        for (i = 0; i < data.Similar.Results.length; i++) {
+            data.Similar.Results[i].Name = data.Similar.Results[i].Name.trim().replace(/[&]+/g, "and").toLowerCase();
+
+        }
+        for (i = 0; i < data.Similar.Results.length; i++) {
+            moviesList[data.Similar.Results[i].Name] = {};
+            moviesList[data.Similar.Results[i].Name].yUrl = data.Similar.Results[i].yUrl;
+        }
+        for (var movie in moviesList) {
+            movie.replace(/['.]+/g, "").replace('and', ""); // normalize the string to get results more effectively
+            getIMDBResults(movie, addMovieInfoToList); //Get the IMDB movie information for each video in the list
+        }
     }
 }
-
 
 //Add movie info from IMDB to the moviesList object
 
 function addMovieInfoToList(data) {
-    if (data.Response == 'False') {
+    if (data.Response == "False") {
         counter++;
     } else {
         var titles = data.Title.toLowerCase().replace(/["]+/g, '');
@@ -123,7 +123,7 @@ function sortMoviesByRating(list) {
     var movieNamesAndScores = {};
     var moviesWithNoScores = [];
     for (var movie in list) {
-        if (list[movie].score == 'N/A') {
+        if (list[movie].score == "N/A") {
             moviesWithNoScores.push(movie);
         } else if (list[movie].plot === undefined) {
             delete moviesList[movie];
@@ -151,7 +151,7 @@ function renderList() {
         upperName = sortedMoviesList[i].replace(/\w\S*/g, function(txt) {
             return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
         });
-        itemsToRender[i] = '<div class=\"movie-result-box\">' +
+        itemsToRender[i] =
             '<div class=\"row\">' +
             '<div class=\"col\">' +
             '<span class=\"name-image-trailer-box\">' +
@@ -165,17 +165,17 @@ function renderList() {
             '<div class=\"col\">' +
             '<span class=\"plot-score-box\">' +
             '<div>' + moviesList[sortedMoviesList[i]].plot + '</div>' +
-            '<div>Crtic Consensus: "' + moviesList[sortedMoviesList[i]].consensus + '"</div>' +
+            '<div>Critic Consensus: "' + moviesList[sortedMoviesList[i]].consensus + '"</div>' +
             '<div>Rotten Score: ' + moviesList[sortedMoviesList[i]].score + '% </div>' +
             '</span>' +
-            '</div>' +
             '</div>';
+
     }
     $('.search-results-area').html(itemsToRender);
     if (firstSearchPerformed === true) {
         $('.search-results-area').fadeIn("slow");
         $('.search-box-area p').empty();
-        $('.search-box-area p').text('Here are some movies similar to ' + movieSearched + ', in order of their Rotten Tomatoes score:');
+        $('.search-box-area p').text("Here are some movies similar to " + movieSearched + ", in order of their Rotten Tomatoes score:");
         searchButton();
         lightbox();
     } else {
@@ -191,12 +191,12 @@ function lightbox() {
         e.preventDefault();
         var videoHref = $(this).attr("href");
         var lightbox =
-            '<div id=\"lightbox\">' +
-            '<p>Click to close</p>' +
-            '<div id=\"content\">' +
-            '<iframe width=\"450\" height=\"400\" src=\"' + videoHref + '\" frameborder=\"0\" allowfullscreen></iframe>' +
-            '</div>' +
-            '</div>';
+            "<div id=\"lightbox\">" +
+            "<p>Click to close</p>" +
+            "<div id=\"content\">" +
+            "<iframe width=\"450\" height=\"400\" src=\"" + videoHref + "\" frameborder=\"0\" allowfullscreen></iframe>" +
+            "</div>" +
+            "</div>";
         $('body').append(lightbox);
     });
     $('body').on('click', '#lightbox', function() {
@@ -208,15 +208,15 @@ function lightbox() {
 
 function renderSearchArea() {
     $('.search-box-area').append(
-        '<form class=\"search-form\" action=\"#\">' +
-        '<input type=\"text\" class=\"ajax-search\" placeholder=\"Search Again\">' +
-        '<button type=\"submit\" class=\"js-search-button\">Search</button>' +
-        '</form>' +
-        '<div class=\"js-search-results\"></div>' +
-        '<p class=\"intro\">Here are some movies similar to ' + movieSearched + ', in order of their Rotten Tomatoes score:');
+        "<form class=\"search-form\" action=\"#\">" +
+        "<input type=\"text\" class=\"ajax-search\" placeholder=\"Search Again\">" +
+        "<button type=\"submit\" class=\"js-search-button\">Search</button>" +
+        "</form>" +
+        "<div class=\"js-search-results\"></div>" +
+        "<p class=\"intro\">Here are some movies similar to " + movieSearched + ", in order of their Rotten Tomatoes score:");
     $('.spinner').remove();
-    $('.search-results-area').fadeIn('slow');
-    $('.search-box-area').fadeIn('slow');
+    $('.search-results-area').fadeIn("slow");
+    $('.search-box-area').fadeIn("slow");
     firstSearchPerformed = true;
     searchButton();
 }
@@ -236,5 +236,6 @@ function searchButton() {
         getTasteKidResults(query, createMovieList);
     });
 }
+
 
 $(document).ready();

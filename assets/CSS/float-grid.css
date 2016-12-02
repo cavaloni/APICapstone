@@ -50,17 +50,32 @@
 		width: 450px;
 		left: calc(50% - 225px);
 		height: 200px;
+		margin-top: 100px;
 	}
 
   .col-12 {
     width: 100%;
   }
-}
 
+	input{
+		width: 250px;
+	}
+.name-image-trailer-box, .plot-score-box {
+		height: 350px;
+		overflow: auto;
+	}
+
+.first-search-wrapper {
+	width: 100%;
+	margin: 0 auto;
+	left: 0px;
+}
+}
 /*Ipad*/
 
 @media only screen and (min-width: 641px) and (max-width: 930px) {
 	.name-image-trailer-box, .plot-score-box {
-		height: 140%;
+		height: 480px;
+		overflow: auto;
 	}
 }
