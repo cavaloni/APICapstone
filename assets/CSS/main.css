@@ -11,6 +11,9 @@
   position: absolute;
   top: 0;
   left: 0px;
+  text-align: center;
+  padding-top: 20px;
+  z-index: -1;
 }
 
 .first-search-box {
@@ -57,6 +60,17 @@
     bottom: -75px;
 }
 
+.error-msg, .error-msg-2 {
+  width: 300px;
+  position: absolute;
+  left: calc(50% - 150px);
+  text-align: center;
+  top:10px;
+}
+
+.error-msg {
+    top: 10px;
+}
 
 
 /*load waiting spinner*/
@@ -91,6 +105,7 @@
 }
 
 .search-box-area {
+    padding-top: 25px;
     display: none;
     text-align: center;
     background-color: rgb(126, 189, 205, .1);
@@ -235,7 +250,7 @@ button:hover {
     height: 100%;
     background-position: center;
     background-blend-mode: difference;
-    filter: blur(8px);
+    filter: blur(4px);
 }
 
 .content {

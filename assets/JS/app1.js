@@ -56,6 +56,7 @@ function firstSearchButton() {
         });
         getTasteKidResults(query, createMovieList);
         $('.first-search-box').fadeOut('slow', function() {});
+        $('.error-msg').empty();
     });
 }
 
@@ -75,9 +76,13 @@ function searchingAnimations() {
 
 function createMovieList(data) {
     if (data.Similar.Info[0].Type === 'unknown') {
-        alert('No movies found. Please refine your search.');
+      if (firstSearchPerformed === true) {
+        $('.error-msg').text('No movies found. Please refine your search.');
+      } else {
+          $('.error-msg').text('No movies found. Please refine your search.');
         firstSearchButton();
-        $('.first-search-box').fadeIn('fast', function() {});
+        $('.first-search-box').fadeIn('fast', function() {
+        });}
     } else {
         searchingAnimations();
         data.Similar.Results.forEach(function(elem) {
@@ -227,6 +232,7 @@ function searchButton() {
         counter = 0;
         $('.search-results-area').fadeOut('slow');
         $('.search-results-area').empty();
+        $('.error-msg').empty();
         for (var member in moviesList) delete moviesList[member];
         sortedMoviesList = [];
         var query = $('.search-form').find('.ajax-search').val();
