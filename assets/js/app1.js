@@ -55,9 +55,14 @@ function firstSearchButton() {
         movieSearched = query.replace(/\w\S*/g, function(txt) {
             return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
         });
+        if (query === '') {
+            $('.error-msg').text('Please enter a movie to search for.');
+        }
+          else {
         getTasteKidResults(query);
         $('.first-search-box').fadeOut('slow', function() {});
         $('.error-msg').empty();
+      }
     });
 }
 
@@ -79,7 +84,8 @@ function createMovieList(data) {
     if (data.Similar.Info[0].Type === 'unknown') {
       if (firstSearchPerformed === true) {
         $('.error-msg').text('No movies found. Please refine your search.');
-      } else {
+      }
+      else {
           $('.error-msg').text('No movies found. Please refine your search.');
         $('.first-search-box').fadeIn('fast', function() {
         });}
