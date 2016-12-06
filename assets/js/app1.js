@@ -81,6 +81,7 @@ function searchingAnimations() {
 //Add the movies obtained from TasteKid into global object moviesList
 
 function createMovieList(data) {
+    console.log(data);
     if (data.Similar.Info[0].Type === 'unknown') {
       if (firstSearchPerformed === true) {
         $('.error-msg').text('No movies found. Please refine your search.');
@@ -90,6 +91,7 @@ function createMovieList(data) {
         $('.first-search-box').fadeIn('fast', function() {
         });}
     } else {
+        console.log(data);
         searchingAnimations();
         data.Similar.Results.forEach(function(elem) {
             var thisTitle = elem.Name.trim()
@@ -97,6 +99,9 @@ function createMovieList(data) {
                 .toLowerCase();
             moviesList[thisTitle] = {};
             moviesList[thisTitle].yUrl = elem.yUrl;
+            console.log(thisTitle);
+            console.log(moviesList[thisTitle]);
+            console.log(moviesList);
         });
     }
     for (var movie in moviesList) {
@@ -108,18 +113,17 @@ function createMovieList(data) {
 //Add movie info from IMDB to the moviesList object
 
 function addMovieInfoToList(data) {
+    moviesListLength = Object.keys(moviesList);
     if (data.Response == 'False') {
         counter++;
     } else {
         var titles = data.Title.toLowerCase().replace(/["]+/g, '');
         counter++;
-        moviesListLength = Object.keys(moviesList);
         moviesList[titles].plot = data.hasOwnProperty('Plot') ? data.Plot : '';
         moviesList[titles].score = data.tomatoMeter;
         moviesList[titles].poster = data.Poster;
         moviesList[titles].consensus = data.tomatoConsensus;
     }
-    $('.counter-div').append('.');
     if (counter >= moviesListLength.length) { //A loop to stop once all the movies obtained
         sortMoviesByRating(moviesList); //from tasteKidAPI have been searched
     }
@@ -230,7 +234,7 @@ function renderSearchArea() {
 }
 
 function searchButton() {
-    $('.search-box-area').on('click', '.js-search-button', function(e) {
+    $('.search-box-area').unbind('click').on('click', '.js-search-button', function(e) {
         e.preventDefault();
         counter = 0;
         $('.search-results-area').fadeOut('slow');
