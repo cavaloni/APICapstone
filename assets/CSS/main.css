@@ -57,7 +57,7 @@
 
     position: absolute;
     left: calc(50% - 125px);
-    bottom: -75px;
+    bottom: 20%;
 }
 
 .error-msg, .error-msg-2 {

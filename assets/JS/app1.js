@@ -20,14 +20,15 @@ function keysToLowerCase(obj) {
 }
 
 //APIs
-function getTasteKidResults(searchTerm, callback) {
+function getTasteKidResults(searchTerm) {
     var params = {
         q: searchTerm,
         type: 'movies',
         info: 1,
         k: '248912-WatchTon-7SFM2O3H',
     };
-    $.getJSON(tasteKidAPI, params, callback);
+    $.getJSON(tasteKidAPI, params).done(function (data) {createMovieList(data);
+});
 }
 
 function getIMDBResults(searchTerm, callback) {
@@ -45,7 +46,7 @@ function getIMDBResults(searchTerm, callback) {
 //then rendering the results to the page.
 //---------
 
-firstSearchButton();
+$(document).ready(firstSearchButton());
 
 function firstSearchButton() {
     $('.js-first-search-button').on('click', function(e) {
@@ -54,7 +55,7 @@ function firstSearchButton() {
         movieSearched = query.replace(/\w\S*/g, function(txt) {
             return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
         });
-        getTasteKidResults(query, createMovieList);
+        getTasteKidResults(query);
         $('.first-search-box').fadeOut('slow', function() {});
         $('.error-msg').empty();
     });
@@ -62,9 +63,9 @@ function firstSearchButton() {
 
 function searchingAnimations() {
     $('.logo').animate({
-        opacity: .3,
-        left: '10px',
-        top: '60px',
+        opacity: .4,
+        left: '20px',
+        top: '107px',
         height: "22px",
         width: "120px",
         fontSize: "18px"
@@ -80,14 +81,12 @@ function createMovieList(data) {
         $('.error-msg').text('No movies found. Please refine your search.');
       } else {
           $('.error-msg').text('No movies found. Please refine your search.');
-        firstSearchButton();
         $('.first-search-box').fadeIn('fast', function() {
         });}
     } else {
         searchingAnimations();
         data.Similar.Results.forEach(function(elem) {
-            var thisTitle = elem.Name;
-            thisTitle = thisTitle.trim()
+            var thisTitle = elem.Name.trim()
                 .replace(/[&]+/g, 'and')
                 .toLowerCase();
             moviesList[thisTitle] = {};
@@ -95,12 +94,10 @@ function createMovieList(data) {
         });
     }
     for (var movie in moviesList) {
-        movie.replace(/['.]+/g, ""); // normalize the string to get
-        movie.replace('and', ""); // results more effectively
+        movie.replace(/['.]+/g, "").replace('and', ""); // normalize the string to get results more effectively
         getIMDBResults(movie, addMovieInfoToList); //Get the IMDB movie information for each video in the list
     }
 }
-
 
 //Add movie info from IMDB to the moviesList object
 
@@ -111,7 +108,7 @@ function addMovieInfoToList(data) {
         var titles = data.Title.toLowerCase().replace(/["]+/g, '');
         counter++;
         moviesListLength = Object.keys(moviesList);
-        moviesList[titles].plot = data.Plot;
+        moviesList[titles].plot = data.hasOwnProperty('Plot') ? data.Plot : '';
         moviesList[titles].score = data.tomatoMeter;
         moviesList[titles].poster = data.Poster;
         moviesList[titles].consensus = data.tomatoConsensus;
@@ -151,6 +148,7 @@ function sortMoviesByRating(list) {
 //------
 
 function renderList() {
+    $('.spinner').remove();
     var itemsToRender = [];
     for (i = 0; i < sortedMoviesList.length; i++) {
         upperName = sortedMoviesList[i].replace(/\w\S*/g, function(txt) {
@@ -219,7 +217,6 @@ function renderSearchArea() {
         '</form>' +
         '<div class=\"js-search-results\"></div>' +
         '<p class=\"intro\">Here are some movies similar to ' + movieSearched + ', in order of their Rotten Tomatoes score:');
-    $('.spinner').remove();
     $('.search-results-area').fadeIn('slow');
     $('.search-box-area').fadeIn('slow');
     firstSearchPerformed = true;
@@ -242,5 +239,3 @@ function searchButton() {
         getTasteKidResults(query, createMovieList);
     });
 }
-
-$(document).ready();
