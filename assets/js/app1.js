@@ -81,7 +81,6 @@ function searchingAnimations() {
 //Add the movies obtained from TasteKid into global object moviesList
 
 function createMovieList(data) {
-    console.log(data);
     if (data.Similar.Info[0].Type === 'unknown') {
       if (firstSearchPerformed === true) {
         $('.error-msg').text('No movies found. Please refine your search.');
@@ -91,7 +90,7 @@ function createMovieList(data) {
         $('.first-search-box').fadeIn('fast', function() {
         });}
     } else {
-        console.log(data);
+
         searchingAnimations();
         data.Similar.Results.forEach(function(elem) {
             var thisTitle = elem.Name.trim()
@@ -99,9 +98,6 @@ function createMovieList(data) {
                 .toLowerCase();
             moviesList[thisTitle] = {};
             moviesList[thisTitle].yUrl = elem.yUrl;
-            console.log(thisTitle);
-            console.log(moviesList[thisTitle]);
-            console.log(moviesList);
         });
     }
     for (var movie in moviesList) {
