@@ -46,6 +46,10 @@
 
 }
 
+.logo {
+	bottom: 45%;
+}
+
 	.first-search-box {
 		width: 450px;
 		left: calc(50% - 225px);

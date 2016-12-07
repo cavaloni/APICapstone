@@ -76,6 +76,7 @@ function searchingAnimations() {
         fontSize: "18px"
     }, 'slow');
     $('.content').append('<div class="spinner"></div>');
+    $('.content').addClass('blurred');
 }
 
 //Add the movies obtained from TasteKid into global object moviesList
