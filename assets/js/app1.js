@@ -1,37 +1,28 @@
-//Global Variables
-var moviesList = {};
-var sortedMoviesList = [];
-var tasteKidAPI = 'https://www.tastekid.com/api/similar?callback=?';
-var imdbAPI = 'https://www.omdbapi.com/?callback=?';
-var counter = 0;
-var movieSearched = '';
-var firstSearchPerformed = false;
-
-//String/title modifier
-
-function keysToLowerCase(obj) {
-    Object.keys(obj).forEach(
-        function(key) {
-            var k = key.toLowerCase();
-            obj[k] = obj[key];
-            delete obj[key];
-        });
-    return (obj);
-}
+//Global State
+var state = {
+    moviesList: {},
+    sortedMoviesList: [],
+    counter: 0,
+    movieSearched: '',
+    firstSearchPerformed: false
+};
 
 //APIs
 function getTasteKidResults(searchTerm) {
+    var tasteKidAPI = 'https://www.tastekid.com/api/similar?callback=?';
     var params = {
         q: searchTerm,
         type: 'movies',
         info: 1,
         k: '248912-WatchTon-7SFM2O3H',
     };
-    $.getJSON(tasteKidAPI, params).done(function (data) {createMovieList(data);
-});
+    $.getJSON(tasteKidAPI, params).done(function(data) {
+        createMovieList(data);
+    });
 }
 
 function getIMDBResults(searchTerm, callback) {
+    var imdbAPI = 'https://www.omdbapi.com/?callback=?';
     var params = {
         t: searchTerm,
         type: 'movie',
@@ -52,17 +43,16 @@ function firstSearchButton() {
     $('.js-first-search-button').on('click', function(e) {
         e.preventDefault();
         var query = $('.-first-ajax-search').val();
-        movieSearched = query.replace(/\w\S*/g, function(txt) {
+        state.movieSearched = query.replace(/\w\S*/g, function(txt) {
             return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
         });
         if (query === '') {
             $('.error-msg').text('Please enter a movie to search for.');
+        } else {
+            getTasteKidResults(query);
+            $('.first-search-box').fadeOut('slow', function() {});
+            $('.error-msg').empty();
         }
-          else {
-        getTasteKidResults(query);
-        $('.first-search-box').fadeOut('slow', function() {});
-        $('.error-msg').empty();
-      }
     });
 }
 
@@ -83,13 +73,12 @@ function searchingAnimations() {
 
 function createMovieList(data) {
     if (data.Similar.Info[0].Type === 'unknown') {
-      if (firstSearchPerformed === true) {
-        $('.error-msg').text('No movies found. Please refine your search.');
-      }
-      else {
-          $('.error-msg').text('No movies found. Please refine your search.');
-        $('.first-search-box').fadeIn('fast', function() {
-        });}
+        if (state.firstSearchPerformed === true) {
+            $('.error-msg').text('No movies found. Please refine your search.');
+        } else {
+            $('.error-msg').text('No movies found. Please refine your search.');
+            $('.first-search-box').fadeIn('fast', function() {});
+        }
     } else {
 
         searchingAnimations();
@@ -97,11 +86,11 @@ function createMovieList(data) {
             var thisTitle = elem.Name.trim()
                 .replace(/[&]+/g, 'and')
                 .toLowerCase();
-            moviesList[thisTitle] = {};
-            moviesList[thisTitle].yUrl = elem.yUrl;
+            state.moviesList[thisTitle] = {};
+            state.moviesList[thisTitle].yUrl = elem.yUrl;
         });
     }
-    for (var movie in moviesList) {
+    for (var movie in state.moviesList) {
         movie.replace(/['.]+/g, "").replace('and', ""); // normalize the string to get results more effectively
         getIMDBResults(movie, addMovieInfoToList); //Get the IMDB movie information for each video in the list
     }
@@ -110,19 +99,19 @@ function createMovieList(data) {
 //Add movie info from IMDB to the moviesList object
 
 function addMovieInfoToList(data) {
-    moviesListLength = Object.keys(moviesList);
+    moviesListLength = Object.keys(state.moviesList);
     if (data.Response == 'False') {
-        counter++;
+        state.counter++;
     } else {
         var titles = data.Title.toLowerCase().replace(/["]+/g, '');
-        counter++;
-        moviesList[titles].plot = data.hasOwnProperty('Plot') ? data.Plot : '';
-        moviesList[titles].score = data.tomatoMeter;
-        moviesList[titles].poster = data.Poster;
-        moviesList[titles].consensus = data.tomatoConsensus;
+        state.counter++;
+        state.moviesList[titles].plot = data.hasOwnProperty('Plot') ? data.Plot : '';
+        state.moviesList[titles].score = data.tomatoMeter;
+        state.moviesList[titles].poster = data.Poster;
+        state.moviesList[titles].consensus = data.tomatoConsensus;
     }
-    if (counter >= moviesListLength.length) { //A loop to stop once all the movies obtained
-        sortMoviesByRating(moviesList); //from tasteKidAPI have been searched
+    if (state.counter >= moviesListLength.length) { //A loop to stop once all the movies obtained
+        sortMoviesByRating(state.moviesList); //from tasteKidAPI have been searched
     }
 }
 
@@ -135,17 +124,17 @@ function sortMoviesByRating(list) {
         if (list[movie].score == 'N/A') {
             moviesWithNoScores.push(movie);
         } else if (list[movie].plot === undefined) {
-            delete moviesList[movie];
+            delete state.moviesList[movie];
         } else {
             movieNamesAndScores[movie] = list[movie].score;
         }
     }
-    sortedMoviesList = Object.keys(movieNamesAndScores).sort(function(a, b) {
+    state.sortedMoviesList = Object.keys(movieNamesAndScores).sort(function(a, b) {
         return movieNamesAndScores[a] - movieNamesAndScores[b];
     });
-    sortedMoviesList.reverse();
+    state.sortedMoviesList.reverse();
     for (i = 0; i < moviesWithNoScores.length; i++) {
-        sortedMoviesList.push(moviesWithNoScores[i]);
+        state.sortedMoviesList.push(moviesWithNoScores[i]);
     }
     renderList();
 }
@@ -157,8 +146,8 @@ function sortMoviesByRating(list) {
 function renderList() {
     $('.spinner').remove();
     var itemsToRender = [];
-    for (i = 0; i < sortedMoviesList.length; i++) {
-        upperName = sortedMoviesList[i].replace(/\w\S*/g, function(txt) {
+    for (i = 0; i < state.sortedMoviesList.length; i++) {
+        upperName = state.sortedMoviesList[i].replace(/\w\S*/g, function(txt) {
             return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
         });
         itemsToRender[i] = '<div class=\"movie-result-box\">' +
@@ -166,26 +155,26 @@ function renderList() {
             '<div class=\"col\">' +
             '<span class=\"name-image-trailer-box\">' +
             '<h3>' + upperName + '</h3>' +
-            '<img src=\"' + moviesList[sortedMoviesList[i]].poster + '\" alt=\"Movie Poster Image\">' +
-            '<div><a id=\"lightbox_trigger\" href=' + moviesList[sortedMoviesList[i]].yUrl + '>Watch Trailer</a>  </div>' +
+            '<img src=\"' + state.moviesList[state.sortedMoviesList[i]].poster + '\" alt=\"Movie Poster Image\">' +
+            '<div><a id=\"lightbox_trigger\" href=' + state.moviesList[state.sortedMoviesList[i]].yUrl + '>Watch Trailer</a>  </div>' +
             '</span>' +
             '</div>' +
             '</div>' +
             '<div class=\"row\">' +
             '<div class=\"col\">' +
             '<span class=\"plot-score-box\">' +
-            '<div>' + moviesList[sortedMoviesList[i]].plot + '</div>' +
-            '<div>Crtic Consensus: "' + moviesList[sortedMoviesList[i]].consensus + '"</div>' +
-            '<div>Rotten Score: ' + moviesList[sortedMoviesList[i]].score + '% </div>' +
+            '<div>' + state.moviesList[state.sortedMoviesList[i]].plot + '</div>' +
+            '<div>Crtic Consensus: "' + state.moviesList[state.sortedMoviesList[i]].consensus + '"</div>' +
+            '<div>Rotten Score: ' + state.moviesList[state.sortedMoviesList[i]].score + '% </div>' +
             '</span>' +
             '</div>' +
             '</div>';
     }
     $('.search-results-area').html(itemsToRender);
-    if (firstSearchPerformed === true) {
+    if (state.firstSearchPerformed === true) {
         $('.search-results-area').fadeIn("slow");
         $('.search-box-area p').empty();
-        $('.search-box-area p').text('Here are some movies similar to ' + movieSearched + ', in order of their Rotten Tomatoes score:');
+        $('.search-box-area p').text('Here are some movies similar to ' + state.movieSearched + ', in order of their Rotten Tomatoes score:');
         searchButton();
         lightbox();
     } else {
@@ -223,24 +212,24 @@ function renderSearchArea() {
         '<button type=\"submit\" class=\"js-search-button\">Search</button>' +
         '</form>' +
         '<div class=\"js-search-results\"></div>' +
-        '<p class=\"intro\">Here are some movies similar to ' + movieSearched + ', in order of their Rotten Tomatoes score:');
+        '<p class=\"intro\">Here are some movies similar to ' + state.movieSearched + ', in order of their Rotten Tomatoes score:');
     $('.search-results-area').fadeIn('slow');
     $('.search-box-area').fadeIn('slow');
-    firstSearchPerformed = true;
+    state.firstSearchPerformed = true;
     searchButton();
 }
 
 function searchButton() {
     $('.search-box-area').unbind('click').on('click', '.js-search-button', function(e) {
         e.preventDefault();
-        counter = 0;
+        state.counter = 0;
         $('.search-results-area').fadeOut('slow');
         $('.search-results-area').empty();
         $('.error-msg').empty();
-        for (var member in moviesList) delete moviesList[member];
-        sortedMoviesList = [];
+        for (var member in state.moviesList) delete state.moviesList[member];
+        state.sortedMoviesList = [];
         var query = $('.search-form').find('.ajax-search').val();
-        movieSearched = query.replace(/\w\S*/g, function(txt) {
+        state.movieSearched = query.replace(/\w\S*/g, function(txt) {
             return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
         });
         getTasteKidResults(query, createMovieList);
